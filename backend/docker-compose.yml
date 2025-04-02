@@ -1,0 +1,23 @@
+services:
+    db:
+        image: postgres:latest
+        restart: always
+        ports:
+            - 5454:5432
+        volumes:
+            - pg_data:/var/lib/postgresql/data
+        env_file:
+            - .env
+    redis:
+        image: redis:latest
+        restart: always
+        ports:
+            - '6379:6379'
+        volumes:
+            - redis_data:/root/redis
+        env_file:
+            - .env
+
+volumes:
+    pg_data:
+    redis_data:
