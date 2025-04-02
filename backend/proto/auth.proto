@@ -5,6 +5,21 @@ package auth;
 service AuthService {
     rpc Login (AuthDto) returns (AuthResponse) {}
     rpc Register (AuthDto) returns (AuthResponse) {}
+    rpc Profile (ProfileReguest) returns (ProfileDto) {}
+    rpc GetNewTokens (GetNewTokensRequest) returns (AuthResponse) {}
+}
+
+message GetNewTokensRequest {
+    string refreshToken = 1;
+}
+
+message ProfileDto {
+    string id = 1;
+    string email = 2;
+}
+
+message ProfileReguest {
+    string id = 1;
 }
 
 message AuthDto {

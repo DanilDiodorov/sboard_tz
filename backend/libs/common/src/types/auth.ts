@@ -10,6 +10,19 @@ import { Observable } from "rxjs";
 
 export const protobufPackage = "auth";
 
+export interface GetNewTokensRequest {
+  refreshToken: string;
+}
+
+export interface ProfileDto {
+  id: string;
+  email: string;
+}
+
+export interface ProfileReguest {
+  id: string;
+}
+
 export interface AuthDto {
   email: string;
   password: string;
@@ -32,17 +45,25 @@ export interface AuthServiceClient {
   login(request: AuthDto): Observable<AuthResponse>;
 
   register(request: AuthDto): Observable<AuthResponse>;
+
+  profile(request: ProfileReguest): Observable<ProfileDto>;
+
+  getNewTokens(request: GetNewTokensRequest): Observable<AuthResponse>;
 }
 
 export interface AuthServiceController {
   login(request: AuthDto): Promise<AuthResponse> | Observable<AuthResponse> | AuthResponse;
 
   register(request: AuthDto): Promise<AuthResponse> | Observable<AuthResponse> | AuthResponse;
+
+  profile(request: ProfileReguest): Promise<ProfileDto> | Observable<ProfileDto> | ProfileDto;
+
+  getNewTokens(request: GetNewTokensRequest): Promise<AuthResponse> | Observable<AuthResponse> | AuthResponse;
 }
 
 export function AuthServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["login", "register"];
+    const grpcMethods: string[] = ["login", "register", "profile", "getNewTokens"];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("AuthService", method)(constructor.prototype[method], method, descriptor);

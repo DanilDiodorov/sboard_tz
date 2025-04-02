@@ -5,7 +5,12 @@ import { AUTH_PACKAGE_NAME } from '@app/common'
 import { join } from 'path'
 import { AuthController } from './auth.controller'
 import { AuthService } from './auth.service'
-import { ConfigModule } from '@nestjs/config'
+import { ConfigModule, ConfigService } from '@nestjs/config'
+import { JwtStrategy } from './jwt.strategy'
+import { JwtModule } from '@nestjs/jwt'
+import { getJwtConfig } from '../config/jwt.config'
+import { APP_FILTER } from '@nestjs/core'
+import { GrpcServerExceptionFilter } from 'nestjs-grpc-exceptions'
 
 @Module({
     imports: [
@@ -19,9 +24,21 @@ import { ConfigModule } from '@nestjs/config'
                 }
             }
         ]),
-        ConfigModule
+        ConfigModule,
+        JwtModule.registerAsync({
+            imports: [ConfigModule],
+            inject: [ConfigService],
+            useFactory: getJwtConfig
+        })
     ],
     controllers: [AuthController],
-    providers: [AuthService]
+    providers: [
+        AuthService,
+        JwtStrategy,
+        {
+            provide: APP_FILTER,
+            useClass: GrpcServerExceptionFilter
+        }
+    ]
 })
 export class AuthModule {}

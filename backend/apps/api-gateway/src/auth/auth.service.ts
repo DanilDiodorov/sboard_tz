@@ -1,7 +1,13 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common'
 import { AUTH_SERVICE } from './constants'
 import { ClientGrpc } from '@nestjs/microservices'
-import { AUTH_SERVICE_NAME, AuthDto, AuthServiceClient } from '@app/common'
+import {
+    AUTH_SERVICE_NAME,
+    AuthDto,
+    AuthServiceClient,
+    GetNewTokensRequest,
+    ProfileReguest
+} from '@app/common'
 import { ConfigService } from '@nestjs/config'
 import { Response } from 'express'
 
@@ -21,12 +27,20 @@ export class AuthService implements OnModuleInit {
             this.client.getService<AuthServiceClient>(AUTH_SERVICE_NAME)
     }
 
-    login(authDto: AuthDto) {
-        return this.authService.login(authDto)
+    login(dto: AuthDto) {
+        return this.authService.login(dto)
     }
 
-    register(authDto: AuthDto) {
-        return this.authService.register(authDto)
+    register(dto: AuthDto) {
+        return this.authService.register(dto)
+    }
+
+    profile(dto: ProfileReguest) {
+        return this.authService.profile(dto)
+    }
+
+    getNewTokens(dto: GetNewTokensRequest) {
+        return this.authService.getNewTokens(dto)
     }
 
     addRefreshTokenToResponse(res: Response, refreshToken: string) {

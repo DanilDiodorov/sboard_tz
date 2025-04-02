@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { hash, verify } from 'argon2'
-import { Response } from 'express'
 import { UsersService } from './users/users.service'
 import { AuthDto, AuthResponse } from '@app/common'
-import { RpcException } from '@nestjs/microservices'
+import {
+    GrpcInvalidArgumentException,
+    GrpcNotFoundException
+} from 'nestjs-grpc-exceptions'
 
 @Injectable()
 export class AuthService {
@@ -50,19 +52,16 @@ export class AuthService {
     private async validateUser(dto: AuthDto) {
         const user = await this.userService.findByEmail(dto.email)
 
-        if (!user) throw new RpcException('Пользователь не найден')
+        if (!user) throw new GrpcNotFoundException('Пользователь не найден')
 
         const isValid = await verify(user.password, dto.password)
 
-        if (!isValid) throw new RpcException('Пользователь не найден')
+        if (!isValid) throw new GrpcNotFoundException('Пользователь не найден')
 
         return user
     }
 
-    async getNewTokens(
-        refreshToken: string,
-        res: Response
-    ): Promise<AuthResponse> {
+    async getNewTokens(refreshToken: string): Promise<AuthResponse> {
         try {
             const result = await this.jwt.verifyAsync(refreshToken)
             const { password, ...user } = await this.userService.findOne(
@@ -76,7 +75,7 @@ export class AuthService {
                 tokens
             }
         } catch (error) {
-            throw new RpcException('Ошибка авторизации')
+            throw new GrpcInvalidArgumentException('Ошибка авторизации')
         }
     }
 }

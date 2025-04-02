@@ -3,7 +3,7 @@ import { Repository } from 'typeorm'
 import { User } from './entities/user.entity'
 import { InjectRepository } from '@nestjs/typeorm'
 import { AuthDto } from '@app/common'
-import { RpcException } from '@nestjs/microservices'
+import { GrpcAlreadyExistsException } from 'nestjs-grpc-exceptions'
 
 @Injectable()
 export class UsersService {
@@ -16,7 +16,7 @@ export class UsersService {
         const findUser = await this.findByEmail(createUserDto.email)
 
         if (findUser) {
-            throw new RpcException('Пользователь с таким E-mail уже существует')
+            throw new GrpcAlreadyExistsException('Пользователь уже существует')
         }
 
         const user = this.userRepository.create(createUserDto)
