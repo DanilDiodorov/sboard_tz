@@ -9,7 +9,7 @@ import {
     UnauthorizedException,
     UseInterceptors
 } from '@nestjs/common'
-import { AuthDto } from '@app/common'
+import { AuthDto } from '@app/common/types/auth'
 import { AuthService } from './auth.service'
 import { Request, Response } from 'express'
 import { lastValueFrom } from 'rxjs'

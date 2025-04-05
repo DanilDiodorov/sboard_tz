@@ -5,7 +5,7 @@ import {
     AuthServiceControllerMethods,
     GetNewTokensRequest,
     ProfileReguest
-} from '@app/common'
+} from '@app/common/types/auth'
 import { AuthService } from './auth.service'
 import { UsersService } from './users/users.service'
 

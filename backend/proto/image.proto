@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package image;
+
+service ImageProcessService {
+  rpc UploadFile(stream UploadFileRequest) returns (UploadFileResponse) {};
+}
+
+message UploadFileRequest {
+  oneof data {
+    FileMetadata metadata = 1;
+    bytes chunk = 2;
+  }
+}
+
+message FileMetadata {
+  string filename = 1;
+  string userId = 4;
+}
+
+message UploadFileResponse {
+  string id = 1;
+  string originalName = 2;
+  string userId = 3;
+  string path = 4;
+  string status = 5;
+  string createdAt = 6;
+}

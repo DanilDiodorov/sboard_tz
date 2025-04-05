@@ -1,18 +1,18 @@
 import { NestFactory } from '@nestjs/core'
-import { AuthModule } from './auth.module'
 import { MicroserviceOptions, Transport } from '@nestjs/microservices'
 import { join } from 'path'
-import { AUTH } from '@app/common'
+import { ImageProcessModule } from './image-process.module'
+import { IMAGE_PACKAGE_NAME } from '@app/common/types/image'
 
 async function bootstrap() {
     const app = await NestFactory.createMicroservice<MicroserviceOptions>(
-        AuthModule,
+        ImageProcessModule,
         {
             transport: Transport.GRPC,
             options: {
-                url: 'localhost:3001',
-                protoPath: join(__dirname, '../auth.proto'),
-                package: AUTH
+                url: 'localhost:3002',
+                protoPath: join(__dirname, '../image.proto'),
+                package: IMAGE_PACKAGE_NAME
             }
         }
     )

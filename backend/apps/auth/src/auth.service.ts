@@ -2,11 +2,11 @@ import { Injectable } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { hash, verify } from 'argon2'
 import { UsersService } from './users/users.service'
-import { AuthDto, AuthResponse } from '@app/common'
 import {
     GrpcInvalidArgumentException,
     GrpcNotFoundException
 } from 'nestjs-grpc-exceptions'
+import { AuthDto, AuthResponse } from '@app/common/types/auth'
 
 @Injectable()
 export class AuthService {

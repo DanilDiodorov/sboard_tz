@@ -7,7 +7,7 @@ import {
     AuthServiceClient,
     GetNewTokensRequest,
     ProfileReguest
-} from '@app/common'
+} from '@app/common/types/auth'
 import { ConfigService } from '@nestjs/config'
 import { Response } from 'express'
 
